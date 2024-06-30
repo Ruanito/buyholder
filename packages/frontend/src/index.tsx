@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ClerkProvider } from '@clerk/clerk-react';
+import { createBrowserRouter } from 'react-router-dom';
+import SignInPage from './components/pages/SignInPage';
+import { RouterProvider } from 'react-router';
+import SignUpPage from './components/pages/SignUpPage';
+import { ptBR } from '@clerk/localizations';
+import HomePage from './components/pages/HomePage';
 
 const PUBLISHABLE_KEY = process.env.REACT_APP_PUBLISHABLE_KEY;
 
@@ -11,13 +16,30 @@ if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key');
 }
 
+const router = createBrowserRouter([
+  {
+    path: 'sign-in',
+    element: <SignInPage />,
+  },
+  {
+    path: 'sign-up',
+    element: <SignUpPage />,
+  },
+  {
+    path: '/',
+    element: <HomePage />,
+  },
+]);
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <App />
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} localization={ptBR}>
+      <div className="container mx-auto">
+        <RouterProvider router={router} />
+      </div>
     </ClerkProvider>
   </React.StrictMode>,
 );
